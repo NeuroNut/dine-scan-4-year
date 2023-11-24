@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<link rel="shortcut icon" href="../../assets/images/dinescan.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Menu</title>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  
+  <link rel="stylesheet" href="../../css/style2.css">
+  <!-- <link rel="stylesheet" href="style_order.css"> -->
+  <!-- <script src="script.js"></script> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="customer_menu_pay.js" defer></script>
+  <!-- <script src="orderscript.js"></script> -->
+
+  <style>
+    /* Add your styles for the slider here */
+    .food-item img {
+    width: 150px; /* Adjust the width as needed */
+    height: 150px; /* Adjust the height as needed */
+    object-fit: cover; /* Preserve aspect ratio and cover the entire container */
+    border-radius: 8px;
+  }
+
+  .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px;
+            text-align: center;
+        }
+
+        .modal-buttons {
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+</style>
+
+</head>
+
+<body>
+  <header>
+    <img src="../../assets/images/dinescan.png" alt="Dine Logo">
+    <h1>MIT Fast Foods(Abstract Coders undertaken)</h1>
+  </header>
+
+  <main>
+    <div class="table-number">
+      <h2>Table Number: 0</h2>
+    </div>
+
+    <button class="order-button" id="past-orders-btn">View Your Past Orders</button>
+    <div id="past-orders" style="display: none;" class="orders-container">
+      <!-- Here we will display the past orders using JavaScript -->
+    </div>
+
+    <div class="menu">
+     
+    </div>
+    <h4><label for="instructions">Any Instructions for the chef:</label></h4><br>
+    <textarea id="instructions" class="premium-input"></textarea>
+    <h2>Total Item Count: <span id="total-count">0</span></h2>
+    <h2>Total Amount: ₹ <span id="total-amount">0.00</span></h2>
+    <!-- <button id="orderBtn" class="order-button">Send to chef</button> -->
+    <!-- <button class="order-button" id="order-btn">Order</button> -->
+
+    <div class="slider-container">
+      <!-- <label class="slider-label">Postpaid order</label> -->
+      <label class="switch">
+        <input type="checkbox" id="order-type-toggle" unchecked>
+        <span class="slider round"></span>
+      </label>
+      <label class="slider-label" id="prepaid-label"> Make it a Prepaid Order ?</label>
+      <br>
+    </div>
+
+    <button class="order-button faded" id="order-btn" disabled>Order Postpaid</button>
+    <button class="order-button faded" id="payment-order-btn" style="display: none;" disabled>Make payment and order</button>
+
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <h2>Confirmation</h2>
+            <p>Are you sure you want to proceed?</p>
+            <div class="modal-buttons">
+                <button id="confirm-btn">Confirm</button>
+                <button id="cancel-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+    </main>
+   
+
+    <footer>
+    <p>Copyright &copy; 2023 Abstract Coders</p>
+    </footer>
+
+    </body>
+
+    </html>

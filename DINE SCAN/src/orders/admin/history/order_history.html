@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="shortcut icon" href="../../../assets/images/default-image.jpg">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restaurant Software Owner Interface</title>
+<link rel="stylesheet" href="../../../css/style.css">
+<link rel="stylesheet" href="../../../css/search-style.css">
+<link rel="stylesheet" href="../../../css/style_order.css">
+<style>
+  /* Add CSS for the side menu animation */
+  .item-details {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    /* bottom: 50%; */
+    /* z-index: 99;
+    
+    
+    background-color: #fff;
+    border: 1px solid #ccc;
+    text-align: center; */
+  }
+  .side-menu {
+    display: none;
+    transition: transform 5.3s ease-in-out;
+    transform: translateX(-100%);
+  }
+
+  .side-menu.open {
+    display: block;
+    transform: translateX(0);
+  }
+
+  /* .side-menu {
+    width: 100%;
+    text-align: center;
+  } */
+  
+  .side-menu ul {
+    list-style: none;
+  }
+  
+  .side-menu ul li {
+    margin-bottom: 10px;
+  }
+  
+  .side-menu ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+  }
+  
+  .side-menu ul li a:hover {
+    color: #fdd835;
+  }
+</style>
+</head>
+<body>
+  <div class="animation-container">
+    <img src="../../../assets/images/dinescan.png" alt="Dine Logo" class="animation-logo">
+  </div>
+  
+  <header class="header">
+    <div class="logo">
+      <img src="../../../assets/images/dinescan.png" alt="Dine Logo" class="logo-img">
+      <h1>MIT Fast Foods (Abstract Coders undertaken)</h1>
+    </div>
+  </header>
+  
+  <div class="main-container">
+    <div class="left-pane">
+      <div class="hamburger-menu">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+      </div>
+      <nav class="side-menu">
+        <ul>
+          <li><a href="../index.html">Orders</a></li>
+<li><a href="#">Order History</a></li>
+          <li><a href="../../../QR/qr.html">QR Generator</a></li>
+          <li><a href="../../../menu/admin/menu-management.html">Menu Management</a></li>
+          <li><a href="../billing-management.php">Billing Management</a></li>
+          <li><a href="../../../analytics/analytics.html">Analytics</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="right-pane">
+      <h2>Order history</h2>
+
+
+      <div class="table_data">
+      <input class="search" type="text" id="search-input" placeholder="Search by id,tableNumber,mobileNumber,payMode...">
+    <input class="search" type="date" id="search-input-d" placeholder="Search by date..."><br><br>
+    <table class="orders-table" id="orders-table">
+    <thead>
+      <tr style="background-image: linear-gradient(to right, #f2f2f2, rgb(172, 162, 25), #ff9500);">
+        <th>ID</th>
+        <th>Table No</th>
+        <th>Amount</th>
+        <th>Mob Number</th>
+        <th>Date & Time <span class="pin" onclick="sortTableByDate('asc')">↑</span> <span class="pin" onclick="sortTableByDate('desc')">↓</span></th>
+        <th>Order Status</th>
+        <th>Instructions</th>
+        <th>Pay Type</th>
+        <th>Transc ID </th>
+        <th>Item Details</th>
+        <th>Delete from DB</th>
+      </tr>
+    </thead>
+    <tbody id="orders-list">
+      <!-- order data will be dynamically loaded here -->
+    </tbody>
+  </table>
+
+  <div id="item-details" class="hidden item-details">
+
+  </div>
+  <br>
+  <div id="pagination-container">
+    <button class="button" id="prev-page-btn">Previous</button>
+  <span id="page-info">Page 1 of 1</span>
+  <button class="button" id="next-page-btn">Next</button>
+</div>
+  <div class="orders-per-page-container">
+  <span>Orders per page:</span>
+<select id="orders-per-page-select">
+  <option value="4">4</option>
+  <option value="5">5</option>
+  <option value="6" selected>6</option>
+  <option value="7">7</option>
+  <option value="8">8</option>
+  <option value="9">9</option>
+  <option value="10">10</option>
+  <option value="11">11</option>
+  <option value="12">12</option>
+  <option value="13">13</option>
+  <option value="14">14</option>
+  <option value="15">15</option>
+</select>
+
+</div>
+</div>
+      
+    </div>
+  </div>
+
+  <script src="search-ord.js"></script>
+  <script src="view-item-details.js"></script>
+
+  <script>
+    // Add JavaScript to toggle the side menu
+    const hamburgerMenu = document.querySelector('.hamburger-menu');
+    const sideMenu = document.querySelector('.side-menu');
+
+    hamburgerMenu.addEventListener('click', () => {
+      sideMenu.classList.toggle('open');
+    });
+  </script>
+</body>
+</html>

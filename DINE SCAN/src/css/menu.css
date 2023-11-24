@@ -1,0 +1,148 @@
+.food-item {
+    width: 200px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .food-item img {
+    width: 150px; /* Adjust the width as needed */
+    height: 150px; /* Adjust the height as needed */
+    object-fit: cover; /* Preserve aspect ratio and cover the entire container */
+    border-radius: 8px;
+  }
+  
+  .food-item h3 {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  /* .button {
+    display: inline-block;
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    font-family: sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+  } */
+
+  .container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.size-select, #foodCostBySize {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+.button-add {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.button-add:hover {
+    background-color: #71b374;
+}
+
+.add-more-size {
+  position:static; 
+  bottom: 0;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.clickable {
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.cost-input {
+    width: calc(50% - 5px);
+    margin-right: 10px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .size-select, #foodCostBySize, .cost-input {
+        width: 100%;
+    }
+
+    .cost-input {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
+
+.hidden {
+    display: none;
+}
+
+/* #foodForm.visible {
+    /* Add your existing styles for #foodForm here */
+    /* display:none; */
+    /*
+    position:relative;
+    top: 5;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform-origin: top;
+    transform: scaleY(1);
+    transition: transform 1.3s ease-out;
+  }
+   */
+  /* #foodForm.visible {
+    transform: scaleY(1);
+  } */
+
+  @keyframes rollIn {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+/* Apply the animation to the form */
+.form-roll-in {
+    animation: rollIn 0.5s ease-out;
+    position:relative;
+    top: 5;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-menu-item-heading:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    color:aqua;
+}

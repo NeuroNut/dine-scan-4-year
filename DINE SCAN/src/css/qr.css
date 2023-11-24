@@ -1,0 +1,252 @@
+/* Reset default margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Body styles */
+  body {
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+  }
+  
+  /* Animation Container */
+  .animation-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #fdd835;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeOut 2s ease-in-out forwards;
+  }
+  
+  .animation-logo {
+    width: 200px;
+  }
+  
+  @keyframes fadeOut {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+  
+  /* Header styles */
+  .header {
+    background-image: linear-gradient(120deg, #FFD700, #FFA500);
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo-img {
+    width: 50px;
+    margin-right: 10px;
+  }
+  
+  /* Main Container */
+  .main-container {
+    display: flex;
+    height: calc(100vh - 80px);
+  }
+  
+  /* Left Pane */
+  .left-pane {
+    width: 20%;
+    background-color: #FFA500;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .hamburger-menu {
+    width: 30px;
+    height: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .hamburger-line {
+    width: 100%;
+    height: 4px;
+    background-color: #fff;
+  }
+  
+  .side-menu {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .side-menu ul {
+    list-style: none;
+  }
+  
+  .side-menu ul li {
+    margin-bottom: 10px;
+  }
+  
+  .side-menu ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+  }
+  
+  .side-menu ul li a:hover {
+    color: #fdd835;
+  }
+  
+  /* Right Pane */
+  .right-pane {
+    flex: 1;
+    padding: 20px;
+    background-color: #fff;
+    overflow-y: auto;
+  }
+  
+  .right-pane h2 {
+    margin-bottom: 20px;
+  }
+  
+  .iframe {
+    width: 100%;
+    height: calc(100% - 30px);
+    border: none;
+  }
+
+  
+  
+h1 {
+	font-family: sans-serif;
+}
+
+input {
+	padding: 10px;
+	border-radius: 20px;
+	border: 2px solid steelblue;
+	font-size: 1.5rem;
+	letter-spacing: 2px;
+	outline: none;
+}
+
+#selectedTemplate canvas {
+  max-width: 50%;
+  max-height: 50%;
+}
+
+#qrcode img.qrcode {
+  width: 30px;
+  height: 30px;
+}
+
+/* Style the label */
+.template-select-label {
+display: block;
+margin-bottom: 5px;
+font-weight: bold;
+}
+
+/* Style the select element */
+#templateSelect {
+width: 100%;
+padding: 5px;
+border: 1px solid #ccc;
+border-radius: 4px;
+background-color: #fff;
+font-family: sans-serif;
+font-size: 14px;
+cursor: pointer;
+}
+
+/* Style the option elements */
+#templateSelect option {
+padding: 5px;
+background-color: rgba(245, 205, 84, 0.852);
+font-family: sans-serif;
+font-size: 14px;
+}
+
+/* Style the dropdown list when it is open */
+#templateSelect:hover,
+#templateSelect:focus {
+border-color: #007bff;
+outline-color: #007bff;
+}
+
+/* Add an appear animation to the dropdown list */
+#templateSelect {
+animation: appear 1.5s ease-in-out forwards;
+}
+
+@keyframes appear {
+from {
+  opacity: 0;
+  transform: translateY(-50px);
+}
+to {
+  opacity: 1;
+  transform: translateY(0);
+}
+}
+
+/* Add a disappearing animation to the dropdown list when it is closed */
+#templateSelect.hide {
+animation: disappear 1.5s ease-in-out forwards;
+}
+
+@keyframes disappear {
+from {
+  opacity: 1;
+  transform: translateY(0);
+}
+to {
+  opacity: 0;
+  transform: translateY(-50px);
+}
+}
+
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  font-family: sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* Button hover state */
+.button:hover {
+  background-color: #eee;
+  border-color: #007bff;
+}
+
+/* Button active state */
+.button:active {
+  background-color: #ddd;
+  border-color: #007bff;
+}
+
+.hidden {
+  display: none;
+}
+
+
+

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<link rel="shortcut icon" href="dinescan.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Menu</title>
+  <link rel="stylesheet" href="style2.css">
+  <!-- <link rel="stylesheet" href="style_order.css"> -->
+  <!-- <script src="script.js"></script> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <!-- <script src="orderscript.js"></script> -->
+</head>
+
+<body>
+  <header>
+    <img src="dinescan.png" alt="Dine Logo">
+    <h1>MIT Fast Foods(Abstract Coders undertaken)</h1>
+  </header>
+
+  <main>
+    <div class="table-number">
+      <h2>Table Number: 0</h2>
+    </div>
+
+    <button class="order-button" id="past-orders-btn">View Your Past Orders</button>
+    <div id="past-orders" style="display: none;" class="orders-container">
+      <!-- Here we will display the past orders using JavaScript -->
+    </div>
+
+    <div class="menu">
+     
+    </div>
+    <h4><label for="instructions">Any Instructions for the chef:</label></h4><br>    
+    <textarea id="instructions"></textarea>
+    <h2>Total Item Count: <span id="total-count">0</span></h2>
+    <h2>Total Amount: ₹ <span id="total-amount">0.00</span></h2>
+    <div id="payment-buttons">
+      <button class="order-button" id="order-btn">Order</button>
+      <button class="order-button" id="payment-order-btn" style="display: none;">Make Payment and Order</button>
+    </div>
+  </main>
+  <script>
+    let count = {};
+    let countTotal = 0;
+    let totalAmount = 0;
+    let paymentMode = "postpaid";
+
+    $.getJSON("menushow.php", function (data) {
+      // Loop through the food items and add them to the menu.
+      for (let foodItem of data) {
+        count[foodItem.name]=0;
+        addFoodItem(foodItem);
+      }
+    });
+
+    // Function to add a food item to the menu.
+    function addFoodItem(foodItem) {
+      // Create a new <div> element for the food item.
+      const foodItemDiv = document.createElement("div");
+      foodItemDiv.classList.add("food-item");
+
+      // Add the food item's image to the <div> element.
+      const foodItemImage = document.createElement("img");
+      foodItemImage.src = foodItem.image;
+      foodItemDiv.appendChild(foodItemImage);
+
+      // Add the food item's name to the <div> element.
+      const foodItemName = document.createElement("h3");
+      foodItemName.textContent = foodItem.name;
+      foodItemDiv.appendChild(foodItemName);
+
+      // Add the cost of the food item to the <div> element.
+      const foodItemCost = document.createElement("span");
+      foodItemCost.textContent = foodItem.cost;
+      foodItemDiv.appendChild(foodItemCost);
+
+      // Add the counter to the <div> element.
+      const counter = document.createElement("div");
+      counter.classList.add("counter");
+
+      // Add the decrement button to the counter.
+      const decrementBtn = document.createElement("button");
+      decrementBtn.classList.add("decrement");
+      decrementBtn.textContent = "-";
+      decrementBtn.addEventListener("click", function () {
+        if (count[foodItem.name] > 0) {
+          count[foodItem.name]--;
+          countSpan.textContent = count[foodItem.name];
+          countTotal--;
+          totalAmount -= parseFloat(foodItem.cost);
+          updateTotalCount();
+        }
+      });
+      counter.appendChild(decrementBtn);
+
+      // Add the count span to the counter.
+      const countSpan = document.createElement("span");
+      countSpan.textContent = count[foodItem.name];
+      counter.appendChild(countSpan);
+
+
+      // Add the increment button to the counter.
+      const incrementBtn = document.createElement("button");
+      incrementBtn.classList.add("increment");
+      incrementBtn.textContent = "+";
+      incrementBtn.addEventListener("click", function () {
+        count[foodItem.name]++;
+        countSpan.textContent = count[foodItem.name];
+        countTotal++;
+        totalAmount += parseFloat(foodItem.cost);
+        updateTotalCount();
+      });
+      counter.appendChild(incrementBtn);
+
+      // Add the counter to the <div> element.
+      foodItemDiv.appendChild(counter);
+
+      // Add the <div> element to the menu.
+      document.querySelector(".menu").appendChild(foodItemDiv);
+    }
+
+    // Update the total count and total amount.
+    function updateTotalCount() {
+      const totalCountSpan = document.querySelector("#total-count");
+      totalCountSpan.textContent = countTotal;
+
+      const totalAmountSpan = document.querySelector("#total-amount");
+      totalAmountSpan.textContent = totalAmount.toFixed(2);
+
+    }
+
+
+    // Function to get the value of a query parameter from the URL
+    function getQueryParam(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
+
+    const pastOrdersButton = document.getElementById("past-orders-btn");
+    const pastOrdersDiv = document.getElementById("past-orders");
+    let pastOrdersVisible = false;
+
+    pastOrdersButton.addEventListener("click", () => {
+      if (!pastOrdersVisible) {
+        // Show past orders
+        pastOrdersDiv.style.display = "block";
+        pastOrdersButton.textContent = "Close";
+        pastOrdersVisible = true;
+        fetchAndDisplayPastOrders();
+        // Fetch and display past orders here (see the script below).
+      } else {
+        // Hide past orders
+        pastOrdersDiv.style.display = "none";
+        pastOrdersButton.textContent = "View Your Past Orders";
+        pastOrdersVisible = false;
+      }
+    });
+
+    // Function to display the past orders
+    function fetchAndDisplayPastOrders() {
+      // Get the user's mobile number from the URL
+      const mobileNumber = getQueryParam('mobileNumber');
+
+      // Fetch past orders using AJAX
+      fetch(`view_past_o.php?mobileNumber=${mobileNumber}`)
+        .then((response) => response.json())
+        .then((data) => {
+          const pastOrdersDiv = document.getElementById('past-orders');
+
+          if (data.length > 0) {
+            // If there are past orders, display them
+            pastOrdersDiv.innerHTML = '<h2>Past Orders</h2>';
+            const ordersList = document.createElement('ul');
+
+            data.forEach((order) => {
+              const orderItem = document.createElement('li');
+              orderItem.textContent = `Order date: ${order.order_date}, Total: ₹${order.order_total}`;
+              ordersList.appendChild(orderItem);
+            });
+
+            pastOrdersDiv.appendChild(ordersList);
+          } else {
+            // If there are no past orders, display a message
+            console.log('No past orders found 1');
+            pastOrdersDiv.innerHTML = '<p>No past orders found, lets orders something!</p>';
+          }
+
+          // Show the past orders div
+          pastOrdersDiv.style.display = 'block';
+
+          // Update the button text to "Close"
+          const pastOrdersButton = document.getElementById('past-orders-btn');
+          pastOrdersButton.textContent = 'Close';
+        })
+        .catch((error) => {
+          console.error('Error fetching past orders:', error);
+        });
+    }
+
+
+    // Function to display the table number
+    function displayTableNumber() {
+      const tableNumber = getQueryParam('tableNo');
+      if (tableNumber) {
+        const tableNumberDiv = document.querySelector(".table-number h2");
+        tableNumberDiv.textContent = "Table Number: " + tableNumber;
+      }
+    }
+
+    // Call the displayTableNumber function when the page loads
+    window.addEventListener('DOMContentLoaded', displayTableNumber);
+
+    function sendOrderData() {
+      const orderData = {
+        table_number: getQueryParam('tableNo'),
+        total_amount: totalAmount.toFixed(2),
+        mobile_number: getQueryParam('mobileNumber'),
+        instructions: document.getElementById("instructions").value,
+        items: []
+      };
+
+      for (const itemName in count) {
+        if (count[itemName] > 0) {
+          orderData.items.push({
+            name: itemName,
+            quantity: count[itemName]
+          });
+        }
+      }
+
+      // Send the order data to the PHP script using the Fetch API
+      fetch("save_order.php", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(orderData)
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log("Response:", data); // Log the response
+          // Handle the response from the server, if needed
+          if (paymentMode === "prepaid") {
+            makePayment(data.order_number, orderData.total_amount);
+          } else {
+            window.location.href = "https://dinescanfrt.azurewebsites.net/thankyou.html";
+          }
+        })
+        .catch(error => {
+          // Handle any errors that occur during the request
+          console.error("Error:", error);
+        });
+    }
+
+    function makePayment(orderNumber, totalAmount) {
+      // Send the order number and total amount to payment.php
+      fetch(`payment.php?orderNumber=${orderNumber}&totalAmount=${totalAmount}`)
+        .then(response => response.json())
+        .then(data => {
+          console.log("Payment Response:", data); // Log the payment response
+          // Handle the payment response from the server, if needed
+          window.location.href = "https://dinescanfrt.azurewebsites.net/thankyou.html";
+        })
+        .catch(error => {
+          // Handle any errors that occur during the payment request
+          console.error("Payment Error:", error);
+        });
+    }
+
+    // Add an event listener to the 'Order' button
+    const orderButton = document.getElementById("order-btn");
+    orderButton.addEventListener("click", sendOrderData);
+
+    // Add an event listener to the 'Make Payment and Order' button
+    const paymentOrderButton = document.getElementById("payment-order-btn");
+    paymentOrderButton.addEventListener("click", () => {
+      sendOrderData();
+    });
+
+    // Toggle the payment mode
+    function togglePaymentMode() {
+      const paymentButtonsDiv = document.getElementById("payment-buttons");
+      const orderButton = document.getElementById("order-btn");
+      const paymentOrderButton = document.getElementById("payment-order-btn");
+
+      if (paymentMode === "postpaid") {
+        paymentMode = "prepaid";
+        orderButton.style.display = "none";
+        paymentOrderButton.style.display = "block";
+      } else {
+        paymentMode = "postpaid";
+        orderButton.style.display = "block";
+        paymentOrderButton.style.display = "none";
+      }
+    }
+
+    // Add an event listener to the payment mode toggle slider
+    const paymentModeToggle = document.getElementById("payment-mode-toggle");
+    paymentModeToggle.addEventListener("change", togglePaymentMode);
+
+  </script>
+
+  <footer>
+    <p>Copyright &copy; 2023 Abstract Coders</p>
+  </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,267 @@
+<html lang="en">
+<head>
+
+<link rel="shortcut icon" href="../../assets/images/dinescan.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restaurant Software Owner Interface</title>
+<link rel="stylesheet" href="../../css/style.css">
+<link rel="stylesheet" href="../../css/style2.css">
+<link rel="stylesheet" href="../../css/menu.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+  <div class="animation-container">
+    <img src="../../assets/images/dinescan.png" alt="Dine Logo" class="animation-logo">
+  </div>
+  
+  <header class="header">
+    <div class="logo">
+      <img src="../../assets/images/dinescan.png" alt="Dine Logo" class="logo-img">
+      <h1>MIT Fast Foods (Abstract Coders undertaken)</h1>
+    </div>
+  </header>
+  
+  <div class="main-container">
+    <div class="left-pane">
+      <div class="hamburger-menu">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+      </div>
+      <nav class="side-menu">
+        <ul>
+          <li><a href="../../orders/admin/index.html">Orders</a></li>
+<li><a href="../../orders/admin/history/order_history.html">Order History</a></li>
+          <li><a href="../../QR/qr.html">QR Generator</a></li>
+          <li><a href="#">Menu Management</a></li>
+          <li><a href="../../orders/admin/billing-management.php">Billing Management</a></li>
+          <li><a href="../../analytics/analytics.html">Analytics</a></li>
+        </ul>
+      </nav>
+    </div>
+    <script>
+      // Add JavaScript to toggle the side menu
+      const hamburgerMenu = document.querySelector('.hamburger-menu');
+      const sideMenu = document.querySelector('.side-menu');
+  
+      hamburgerMenu.addEventListener('click', () => {
+        sideMenu.classList.toggle('open');
+      });
+    </script>
+    <div class="right-pane">
+
+      <div class="add-menu-item">
+        <h2 class="add-menu-item-heading" onclick="toggleForm()">+ ADD new menu item</h2>
+        <form id="foodForm" class="hidden">
+          <div class="form-group">
+            <label for="foodName">Food Name:</label>
+            <input type="text" id="foodName" class="premium-input" required>
+          </div>
+          <div class="form-group">
+            <label for="foodImage">Image File:</label>
+            <input type="file" id="foodImage" name="image" accept="image/*" class="button">
+          </div>
+          <div class="form-group">
+            <label for="foodDescription">Description:</label>
+            <textarea id="foodDescription" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="foodCategory">Category:</label>
+            <select id="foodCategory">
+              <option value="1">Category 1</option>
+              <option value="2">Category 2</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="foodVisibility">Visibility:</label>
+            <select id="foodVisibility">
+              <option value="visible">Visible</option>
+              <option value="hidden">Hidden</option>
+            </select>
+          </div>
+          <div class="form-group" id="sizeContainer">
+            <label for="foodSize">Size:</label>
+            <select id="foodSize" class="size-select">
+                <option value="1">Quarter</option>
+                <option value="2">Half</option>
+                <option value="3">Full</option>
+            </select>
+        </div>
+    
+        <!-- <div class="form-group">
+            <label for="foodCostBySize">Cost by Size:</label>
+            <input type="number" id="foodCostBySize" step="5.00" required>
+        </div> -->
+    
+        <button type="submit" class="button-add">Add Food Item</button>
+        <button type="button" class="button-add" onclick="closeAddForm()">Close Form</button>
+    </form>
+
+    <script>
+          function closeAddForm() {
+            const form = document.getElementById("foodForm");
+            form.classList.toggle("hidden");
+          }
+          function toggleForm() {
+            // const form = document.getElementById("foodForm");
+            // form.classList.toggle("hidden");
+            // form.classList.toggle("visible");
+            const form = document.getElementById("foodForm");
+
+    // Toggle the "hidden" class
+    form.classList.toggle("hidden");
+
+    // Add the animation class when the form is shown
+    if (!form.classList.contains("hidden")) {
+        form.classList.add("form-roll-in");
+    } else {
+        // If the form is hidden, remove the animation class after a delay
+        setTimeout(() => {
+            form.classList.remove("form-roll-in");
+        }, 500); // Adjust the delay to match the animation duration
+    }
+          }
+        </script>
+      </div>
+       
+       
+    
+    <script>
+        const sizeContainer = document.getElementById("sizeContainer");
+    const foodSizeSelect = document.getElementById("foodSize");
+    const foodCostInput = document.getElementById("foodCostBySize");
+
+    let index = 0;
+    // Initial setup
+    updateCostInputs();
+
+    foodSizeSelect.addEventListener("change", updateCostInputs);
+
+    sizeContainer.addEventListener("click", function (event) {
+        if (event.target.classList.contains("add-more-size")) {
+            addSizeSelector();
+        }
+    });
+
+    function updateCostInputs() {
+        const selectedOptions = Array.from(foodSizeSelect.selectedOptions);
+        const selectedSizes = selectedOptions.map((option) => option.value);
+
+        // Remove existing cost inputs and "Add more size" text
+        const existingCostInputs = document.querySelectorAll(".cost-input, .add-more-size");
+        existingCostInputs.forEach((input) => input.remove());
+
+        // Add cost inputs for selected sizes
+        selectedSizes.forEach((size) => {
+            const costInput = document.createElement("input");
+            costInput.type = "number";
+            costInput.step = "5.00";
+            costInput.classList.add("cost-input");
+            costInput.id = `foodCostBySize_${index}`;
+            costInput.placeholder = "Cost for Size " + size;
+            sizeContainer.appendChild(costInput);
+        });
+
+        // Add "Add more size" text if not all sizes are selected
+        if (selectedSizes.length < foodSizeSelect.options.length) {
+            const addMoreSizeText = document.createElement("p");
+            addMoreSizeText.textContent = "Add more size";
+            addMoreSizeText.classList.add("add-more-size", "clickable");
+            sizeContainer.appendChild(addMoreSizeText);
+        }
+    }
+
+    function addSizeSelector() {
+        const newSizeSelector = document.createElement("select");
+        newSizeSelector.classList.add("size-select");
+        Array.from(foodSizeSelect.children).forEach((option) => {
+            newSizeSelector.add(new Option(option.text, option.value));
+        });
+        sizeContainer.appendChild(newSizeSelector);
+
+        const newCostInput = document.createElement("input");
+        newCostInput.type = "number";
+        newCostInput.step = "5.00";
+        newCostInput.classList.add("cost-input");
+        newCostInput.id = `foodCostBySize_${index}`;
+        newCostInput.placeholder = "Cost for Size";
+        sizeContainer.appendChild(newCostInput);
+        index++;
+    }
+</script>
+
+          <h2 align="center">Current Menu</h2><br><br>
+          <div class="menu">
+            
+            <script>
+              
+              $.getJSON("menushow.php", function (data) {
+                // Loop through the food items and add them to the menu.
+                for (let foodItem of data) {
+                  // console.log(foodItem);
+                  addFoodItem(foodItem);
+                }
+              });
+      
+              // Function to add a food item to the menu.
+              function addFoodItem(foodItem) {
+                // Create a new <div> element for the food item.
+                const foodItemDiv = document.createElement("div");
+                foodItemDiv.classList.add("food-item");
+      
+                // Add the food item's image to the <div> element.
+                const foodItemImage = document.createElement("img");
+    
+                foodItemImage.src = 'data:image/jpeg;base64,' + foodItem.image;
+                foodItemDiv.appendChild(foodItemImage);
+      
+                // Add the food item's name to the <div> element.
+                const foodItemName = document.createElement("h3");
+                foodItemName.textContent = foodItem.name;
+                foodItemDiv.appendChild(foodItemName);
+      
+                // Add the cost of the food item to the <div> element.
+                for (let sizeNcost of foodItem.sizesNcosts) {
+
+                  const foodItemCost = document.createElement("span");
+                foodItemCost.textContent = sizeNcost.size_name + ": Rs. " + sizeNcost.cost;
+                foodItemDiv.appendChild(foodItemCost);
+
+               // Create a new line break element
+                const lineBreak = document.createElement("br");
+                // Append the line break to the foodItemDiv
+                foodItemDiv.appendChild(lineBreak);
+                
+                const lineBreak2 = document.createElement("br");
+                // Append the line break to the foodItemDiv
+                foodItemDiv.appendChild(lineBreak2);
+                }
+
+                const deleteButton = document.createElement("button");
+                deleteButton.textContent = "Delete";
+                deleteButton.classList.add("button");
+                deleteButton.addEventListener("click", function() {
+                  deleteFoodItem(foodItem.id);
+                });
+                foodItemDiv.appendChild(deleteButton);
+
+                // Add the <div> element to the menu.
+                document.querySelector(".menu").appendChild(foodItemDiv);
+              
+              function deleteFoodItem(foodItemId) {
+                // Implement the code to delete the food item from the database using AJAX or fetch.
+                // You can make a request to a delete endpoint with the foodItemId as a parameter.
+                // Once the item is deleted, you can remove the corresponding <div> element from the menu.
+              }
+                }
+            </script>
+          </div>
+      
+        
+<script src="new menuscript.js"></script>
+        
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,124 @@
+/* Add CSS reset to normalize styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+/* Set a max-width for the container to make it responsive */
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.orders-table {
+    background-color: #ffffff;
+    max-width: 100%;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-weight: bold;
+  border-collapse: collapse;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+.search {
+    color: #0a0a0a;
+    width: 100%;
+    max-width: 500px; /* Limit the width of the search input */
+    padding: 15px;
+    font-size: 1rem;
+}
+
+.pin {
+    cursor: pointer;
+}
+
+.table_data {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+    max-width: 100%;
+}
+
+th,
+td {
+    padding: 10px;
+}
+
+th {
+    /* background: linear-gradient(to right, #def5b5, #8f8d16, #8f8916, #def5b5); */
+    color: rgb(10, 10, 10);
+    padding: 10px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+
+tr:nth-child(even) {
+    background: linear-gradient(to right, #f2f8d9, #e1d27c);
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    font-family: sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  
+  /* Button hover state */
+  .button:hover {
+    background-color: #eee;
+    border-color: #007bff;
+  }
+  
+  /* Button active state */
+  .button:active {
+    background-color: #ddd;
+    border-color: #007bff;
+  }
+
+  .pagination-container {
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .orders-per-page-container {
+    display: inline-flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .orders-per-page-container span {
+    margin-right: 10px;
+  }
+
+  .orders-per-page-container select {
+    width: 60px;
+    height: 30px;
+    border: none;
+    background-color: #f2f2f2;
+    color: #333;
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 4px;
+  }
+
+  @media screen and (max-width: 768px) {
+    .orders-per-page-container {
+      justify-content: center;
+    }
+  }

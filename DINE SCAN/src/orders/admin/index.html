@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="shortcut icon" href="../../assets/images/dinescan.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restaurant Software Owner Interface</title>
+<link rel="stylesheet" href="../../css/style.css">
+<style>
+  /* Add CSS for the side menu animation */
+  .side-menu {
+    display: none;
+    transition: transform 5.3s ease-in-out;
+    transform: translateX(-100%);
+  }
+
+  .side-menu.open {
+    display: block;
+    transform: translateX(0);
+  }
+
+  /* .side-menu {
+    width: 100%;
+    text-align: center;
+  } */
+  
+  .side-menu ul {
+    list-style: none;
+  }
+  
+  .side-menu ul li {
+    margin-bottom: 10px;
+  }
+  
+  .side-menu ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+  }
+  
+  .side-menu ul li a:hover {
+    color: #fdd835;
+  }
+</style>
+</head>
+<body>
+  <div class="animation-container">
+    <img src="../../assets/images/dinescan.png" alt="Dine Logo" class="animation-logo">
+  </div>
+  
+  <header class="header">
+    <div class="logo">
+      <img src="../../assets/images/dinescan.png" alt="Dine Logo" class="logo-img">
+      <h1>MIT Fast Foods (Abstract Coders undertaken)</h1>
+    </div>
+  </header>
+  
+  <div class="main-container">
+    <div class="left-pane">
+      <div class="hamburger-menu">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+      </div>
+      <nav class="side-menu">
+        <ul>
+          <li><a href="index.html">Orders</a></li>
+<li><a href="history/order_history.html">Order History</a></li>
+          <li><a href="../../QR/qr.html">QR Generator</a></li>
+          <li><a href="../../menu/admin/menu-management.html">Menu Management</a></li>
+          <li><a href="billing-management.php">Billing Management</a></li>
+          <li><a href="../../analytics/analytics.html">Analytics</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="right-pane">
+      <h2>Live Orders</h2>
+      <iframe src="live_orders.html" frameborder="0" class="iframe"></iframe>
+    </div>
+  </div>
+
+  <script>
+    // Add JavaScript to toggle the side menu
+    const hamburgerMenu = document.querySelector('.hamburger-menu');
+    const sideMenu = document.querySelector('.side-menu');
+
+    hamburgerMenu.addEventListener('click', () => {
+      sideMenu.classList.toggle('open');
+    });
+  </script>
+</body>
+</html>

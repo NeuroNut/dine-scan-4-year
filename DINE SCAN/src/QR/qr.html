@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Your head content here... -->
+  <link rel="shortcut icon" href="../assets/images/dinescan.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restaurant Software Owner Interface</title>
+<link rel="stylesheet" href="../css/qr.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap">
+
+
+</head>
+<body>
+  <!-- Your existing HTML content... -->
+  <div class="animation-container">
+    <img src="../assets/images/dinescan.png" alt="Dine Logo" class="animation-logo">
+  </div>
+  
+  <header class="header">
+    <div class="logo">
+      <img src="../assets/images/dinescan.png" alt="Dine Logo" class="logo-img">
+      <h1>MIT Fast Foods (Abstract Coders undertaken)</h1>
+    </div>
+  </header>
+  
+  <div class="main-container">
+    <div class="left-pane">
+      <div class="hamburger-menu">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+      </div>
+      <nav class="side-menu">
+        <ul>
+            <li><a href="../orders/admin/index.html">Orders</a></li>
+<li><a href="../orders/admin/history/order_history.html">Order History</a></li>
+          <li><a href="#">QR Generator</a></li>
+          <li><a href="../menu/admin/menu-management.html">Menu Management</a></li>
+          <li><a href="../orders/admin/billing-management.php">Billing Management</a></li>
+          <li><a href="../analytics/analytics.html">Analytics</a></li>
+        </ul>
+      </nav>
+    </div>
+    <script>
+      // Add JavaScript to toggle the side menu
+      const hamburgerMenu = document.querySelector('.hamburger-menu');
+      const sideMenu = document.querySelector('.side-menu');
+  
+      hamburgerMenu.addEventListener('click', () => {
+        sideMenu.classList.toggle('open');
+      });
+    </script>
+  
+  <div class="right-pane">
+    <h1>QR Code Generator</h1>
+    Enter Table Number:<br>
+    <input type="number" id="tableNumber" />
+
+    <!-- Add template selection options -->
+    
+
+    <button class="button" onclick="generateQRCode()">Generate QR Code</button>
+   
+
+    <!-- Preview area for QR code and selected template -->
+    <div id="previewContainer">
+      <br>
+      <div id="qrcode" class="hidden"></div>
+      <br>
+      <label class="template-select-label" for="templateSelect">Select Template:</label>
+    <select id="templateSelect">
+      <option value="">Select Template</option>
+      <option value="template1">Template 1</option>
+      <option value="template2">Template 2</option>
+      <option value="template3">Template 3</option>
+      <option value="template4">Template 4</option>
+      
+    </select>
+      <div class = "template" id="selectedTemplate"></div><br>
+      <button class="button" onclick="printQRCode()">Print QR Code</button>
+    </div>
+
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+
+
+    <script>
+        const qrcode = new QRCode(document.getElementById("qrcode"));
+      
+
+        // Create a canvas for overlaying the QR code on the template
+        const canvas = document.createElement("canvas");
+
+        const templateCoordinates = {
+    template1: { x: 40, y: 30, w: 128, h: 128, tableNoX: 50, tableNoY: 175, fontSize: 18 }, 
+    template2: { x: 490, y: 160, w: 430, h: 430, tableNoX: 60, tableNoY: 570 , fontSize: 52}, 
+    template3: { x: 140, y: 400, w: 500, h: 500, tableNoX: 270, tableNoY: 940 , fontSize: 40}, 
+    template4: { x: 140, y: 510, w: 690, h: 690, tableNoX: 320, tableNoY: 1495 , fontSize: 70}, 
+    // Add more templates as needed
+  };
+        // Add an event listener for the template selection dropdown
+        document.addEventListener("DOMContentLoaded", function() {
+          const templateSelect = document.getElementById("templateSelect");
+          templateSelect.addEventListener("change", function() {
+            const selectedTemplate = this.value;
+            const templatePreview = document.getElementById("selectedTemplate");
+
+              // Display the selected template in the preview area
+              templatePreview.innerHTML = "";
+
+              // Load the selected template dynamically for preview
+            const templateImage = new Image();
+          templateImage.src = `../assets/templates/${selectedTemplate}.png`;
+          templateImage.onload = () => {
+            
+            
+            const context = canvas.getContext("2d");
+      
+            // Set canvas dimensions to match the template
+            canvas.width = templateImage.width;
+            canvas.height = templateImage.height;
+                  // Draw the template on the canvas
+            context.drawImage(templateImage, 0, 0);
+      
+            // Draw the QR code on the canvas
+            const qrCodeImage = document.getElementById("qrcode").getElementsByTagName("img")[0];
+            const coordinates = templateCoordinates[selectedTemplate];
+      context.drawImage(qrCodeImage, coordinates.x, coordinates.y, coordinates.w, coordinates.h);
+
+      const tableNumber = document.getElementById("tableNumber").value;
+      const fs = coordinates.fontSize;
+      context.font = `bold ${coordinates.fontSize}px Roboto`;
+          context.fillStyle = "black";
+          context.fillText(`Table No. #${tableNumber}`, coordinates.tableNoX, coordinates.tableNoY);
+
+
+
+              templatePreview.appendChild(canvas);
+            };
+          });
+
+          // Check if the template select has a value on initial load
+          if (templateSelect.value) {
+            templateSelect.dispatchEvent(new Event("change"));
+          }
+        });
+     
+      
+        function generateQRCode() {
+          const tableNumber = document.getElementById("tableNumber").value;
+          const qrarea = document.getElementById("qrcode");
+          const url = `https://localhost/DINE SCAN/src/menu/customer/otp_login.php?tableNo=${tableNumber}`;
+//           const options = {
+//   width: 100,
+//   height: 100,
+//   colorDark: "#007f5f",
+//   colorLight: "#ffffff",
+//   correctLevel: QRCode.CorrectLevel.H,
+// };
+          qrcode.makeCode(url, 50);
+          qrarea.classList.remove("hidden");
+        }
+      
+        function printQRCode() {      
+            
+            // Open a new window for printing
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(
+              `<html><body><img src="${canvas.toDataURL("image/png")}" onload="window.print();window.close()"></body></html>`
+            );
+            printWindow.document.close();
+          };
+        
+      </script>
+      
+  </div>
+</body>
+</html>

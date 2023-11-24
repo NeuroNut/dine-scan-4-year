@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="shortcut icon" href="dinescan.png">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restaurant Software Owner Interface</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+<script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+</head>
+<body>
+  <div class="animation-container">
+    <img src="dinescan.png" alt="Dine Logo" class="animation-logo">
+  </div>
+  
+  <header class="header">
+    <div class="logo">
+      <img src="dinescan.png" alt="Dine Logo" class="logo-img">
+      <h1>MIT Fast Foods (Abstract Coders undertaken)</h1>
+    </div>
+  </header>
+  
+  <div class="main-container">
+    <div class="left-pane">
+      <div class="hamburger-menu">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+      </div>
+      <nav class="side-menu">
+        <ul>
+          <li><a href="index.html">Orders</a></li>
+<li><a href="order_history.html">Order History</a></li>
+          <li><a href="qr.html">QR Generator</a></li>
+          <li><a href="menu-management.html">Menu Management</a></li>
+          <li><a href="billing-management.html">Billing Management</a></li>
+          <li><a href="analytics.html">Analytics</a></li>
+        </ul>
+      </nav>
+    </div>
+    <script>
+      // Add JavaScript to toggle the side menu
+      const hamburgerMenu = document.querySelector('.hamburger-menu');
+      const sideMenu = document.querySelector('.side-menu');
+  
+      hamburgerMenu.addEventListener('click', () => {
+        sideMenu.classList.toggle('open');
+      });
+    </script>
+    <div class="right-pane">
+      <h2>Order Analytics</h2>
+      <py-env>
+        - pandas
+        - matplotlib
+        - mysql-connector-python
+        - paths:
+            - DigiCertGlobalRootCA.crt.pem
+      </py-env>
+      <div>
+      <py-script>
+        import warnings
+        warnings.filterwarnings('ignore')
+        import pandas as pd
+        import matplotlib.pyplot as plt
+        import mysql.connector
+
+        conn = mysql.connector.connect(user="abstractcoders", password="Universe$1", host="dinescanfrt.mysql.database.azure.com", port=3306, database="dinescanmenu", ssl_ca="DigiCertGlobalRootCA.crt.pem", ssl_disabled=False)
+
+        # SQL queries to fetch data from the three tables
+        orders_query = 'SELECT * FROM orders'
+        menu_items_query = 'SELECT * FROM menu_items'
+        order_items_query = 'SELECT * FROM order_items'
+
+        # Create Pandas DataFrames from the queried data
+        orders_df = pd.read_sql(orders_query, conn)
+        menu_items_df = pd.read_sql(menu_items_query, conn)
+        order_items_df = pd.read_sql(order_items_query, conn)
+
+        # Close the database connection
+        conn.close()
+
+        
+        # Data analysis and visualization
+        # 1. Number of orders in each month
+        orders_df['order_date'] = pd.to_datetime(orders_df['order_date'])
+        orders_df['order_month'] = orders_df['order_date'].dt.month
+        monthly_order_count = orders_df['order_month'].value_counts().sort_index()
+
+        # 2. Number of orders by status
+        order_status_count = orders_df['status'].value_counts()
+
+        # 3. Total revenue by month
+        monthly_revenue = orders_df.groupby(orders_df['order_date'].dt.strftime('%Y-%m'))['total_amount'].sum()
+
+        # 4. Total revenue by table number
+        table_revenue = orders_df.groupby('table_number')['total_amount'].sum()
+
+        # 5. Most ordered menu items
+        most_ordered_items = order_items_df['menu_item_id'].value_counts().head(5)
+
+        fig1, ax1 = plt.subplots()
+        fig2, ax2 = plt.subplots()
+        fig3, ax3 = plt.subplots()
+        fig4, ax4 = plt.subplots()
+        fig5, ax5 = plt.subplots()
+
+        # Visualization
+        # 1. Number of orders in each month
+        monthly_order_count.plot(kind='bar', title='Number of Orders per Month', ax=ax1)
+        ax1.set_xlabel('Month')
+        ax1.set_ylabel('Number of Orders')
+
+        # 2. Number of orders by status
+        order_status_count.plot(kind='bar', title='Number of Orders by Status', ax=ax2)
+        ax2.set_xlabel('Status')
+        ax2.set_ylabel('Number of Orders')
+
+        # 3. Total revenue by month
+        monthly_revenue.plot(kind='bar', title='Total Revenue per Month', ax=ax3)
+        ax3.set_xlabel('Month')
+        ax3.set_ylabel('Total Revenue')
+
+        # 4. Total revenue by table number
+        table_revenue.plot(kind='bar', title='Total Revenue by Table Number', ax=ax4)
+        ax4.set_xlabel('Table Number')
+        ax4.set_ylabel('Total Revenue')
+
+        # 5. Most ordered menu items
+        most_ordered_items.plot(kind='bar', title='Most Ordered Menu Items', ax=ax5)
+        ax5.set_xlabel('Menu Item ID')
+        ax5.set_ylabel('Number of Orders')
+      </py-script>
+     
+    </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -64,39 +64,47 @@
           </div>
           <div class="form-group">
             <label for="foodDescription">Description:</label>
-            <textarea id="foodDescription" required></textarea>
+            <textarea id="foodDescription" class="premium-input" required></textarea>
           </div>
           <div class="form-group">
             <label for="foodCategory">Category:</label>
-            <select id="foodCategory">
-              <option value="1">Category 1</option>
-              <option value="2">Category 2</option>
+            <select id="foodCategory" class="size-select">
+              <option value="1">Snack</option>
+              <option value="2">Main Course</option>
             </select>
           </div>
           <div class="form-group">
             <label for="foodVisibility">Visibility:</label>
-            <select id="foodVisibility">
+            <select id="foodVisibility" class="size-select">
               <option value="visible">Visible</option>
               <option value="hidden">Hidden</option>
             </select>
           </div>
-          <div class="form-group" id="sizeContainer">
-            <label for="foodSize">Size:</label>
-            <select id="foodSize" class="size-select">
-                <option value="1">Quarter</option>
-                <option value="2">Half</option>
-                <option value="3">Full</option>
-            </select>
+          <div id="optionsContainer">
+            <div class="option-group">
+                <label for="option">Option:</label>
+                <select name="option[0]" class="option size-select">
+                    <!-- <option value="" selected disabled hidden>Please select your favorite size</option> -->
+                    <option value="1" class="optionNumber">Quarter</option>
+                    <option value="2" class="optionNumber">Half</option>
+                    <option value="3" class="optionNumber">Full</option>
+                    <option value="4" class="optionNumber">Small</option>
+                    <option value="5" class="optionNumber">Medium</option>
+                    <option value="6" class="optionNumber">Large</option>
+                    <option value="7" class="optionNumber" selected>Regular</option>
+                </select>
+                <label for="cost">Cost:</label>
+                <input type="number" name="cost[0]" step="1.00" class="cost premium-input" min="0" required>
+                <br>
+            </div>
         </div>
-    
-        <!-- <div class="form-group">
-            <label for="foodCostBySize">Cost by Size:</label>
-            <input type="number" id="foodCostBySize" step="5.00" required>
-        </div> -->
-    
+
+        <button type="button" id="addOption" class="button-add">Add More Options</button><br><br>
         <button type="submit" class="button-add">Add Food Item</button>
         <button type="button" class="button-add" onclick="closeAddForm()">Close Form</button>
     </form>
+
+  </div>
 
     <script>
           function closeAddForm() {
@@ -123,72 +131,100 @@
     }
           }
         </script>
-      </div>
+      
        
        
     
     <script>
-        const sizeContainer = document.getElementById("sizeContainer");
-    const foodSizeSelect = document.getElementById("foodSize");
-    const foodCostInput = document.getElementById("foodCostBySize");
+       document.addEventListener("DOMContentLoaded", function () {
+    const optionsContainer = document.getElementById("optionsContainer");
+    const addOptionButton = document.getElementById("addOption");
+    let uniqueOptions = new Set();
+    const allOption = Array.from(optionsContainer.querySelectorAll(".optionNumber"));
+    const options = new Set(allOption.map(option => option.value));
+    let index=1;
+    //addOptionButton.disabled = true;
 
-    let index = 0;
-    // Initial setup
-    updateCostInputs();
-
-    foodSizeSelect.addEventListener("change", updateCostInputs);
-
-    sizeContainer.addEventListener("click", function (event) {
-        if (event.target.classList.contains("add-more-size")) {
-            addSizeSelector();
+    //create a event listener for a element which has the name 'option[0]'
+    const firstoption = document.querySelector("select[name='option[0]']");
+    //create event listener for firstoption
+    firstoption.addEventListener("change", function () {
+        //console.log(firstoption.value)
+        //if the value of firstoption is not empty
+        if (firstoption.value !== "") {
+            //enable the addOptionButton
+            addOptionButton.disabled = false;
         }
     });
+    
 
-    function updateCostInputs() {
-        const selectedOptions = Array.from(foodSizeSelect.selectedOptions);
-        const selectedSizes = selectedOptions.map((option) => option.value);
 
-        // Remove existing cost inputs and "Add more size" text
-        const existingCostInputs = document.querySelectorAll(".cost-input, .add-more-size");
-        existingCostInputs.forEach((input) => input.remove());
+    addOptionButton.addEventListener("click", function () {
+        //console.log(options)
+        addOptionField();
+        updateAddOptionButton(); // Check if the button should be disabled
+        index++;
+    });
 
-        // Add cost inputs for selected sizes
-        selectedSizes.forEach((size) => {
-            const costInput = document.createElement("input");
-            costInput.type = "number";
-            costInput.step = "5.00";
-            costInput.classList.add("cost-input");
-            costInput.id = `foodCostBySize_${index}`;
-            costInput.placeholder = "Cost for Size " + size;
-            sizeContainer.appendChild(costInput);
+    function addOptionField() {
+        const lastOptionGroup = optionsContainer.firstElementChild;
+        const clonedOptionGroup = lastOptionGroup.cloneNode(true);
+
+        // Clear the values of the cloned fields
+        clonedOptionGroup.querySelectorAll("select, input").forEach(function (field) {
+            field.value = '';
         });
 
-        // Add "Add more size" text if not all sizes are selected
-        if (selectedSizes.length < foodSizeSelect.options.length) {
-            const addMoreSizeText = document.createElement("p");
-            addMoreSizeText.textContent = "Add more size";
-            addMoreSizeText.classList.add("add-more-size", "clickable");
-            sizeContainer.appendChild(addMoreSizeText);
+        // Remove selected options from the new selector
+        const selectedOptions = Array.from(optionsContainer.querySelectorAll(".option"));
+        clonedOptionGroup.querySelector(".option").querySelectorAll("option").forEach(function (option) {
+            if (selectedOptions.some((selected) => selected.value === option.value)) {
+                option.remove();
+            }
+        });
+
+        //change the name of select and input tag of clonedOptionGroup
+        clonedOptionGroup.querySelector(".option").name = "option[" + index + "]";
+        clonedOptionGroup.querySelector(".cost").name = "cost[" + index + "]";
+        console.log(clonedOptionGroup)
+
+        //create a clickable text 'remove' and append to clonedOptionGroup
+        const removeOption = document.createElement("a");
+        removeOption.textContent = "Remove";
+        removeOption.href = "#";
+        removeOption.addEventListener("click", function () {
+            removeOptionField(clonedOptionGroup);
+        });
+        clonedOptionGroup.appendChild(removeOption);
+
+
+        optionsContainer.appendChild(clonedOptionGroup);
+    }
+
+    function removeOptionField(optionGroup) {
+        index--;
+        optionsContainer.removeChild(optionGroup);
+        updateAddOptionButton(); // Check if the button should be disabled
+    }
+
+    function updateAddOptionButton() {
+        const allOptions = Array.from(optionsContainer.querySelectorAll(".option"));
+        uniqueOptions = new Set(allOptions.map(option => option.value));
+
+
+        // console.log(allOptions)
+        // console.log(uniqueOptions)
+        //     console.log(uniqueOptions.size)
+
+        if (options.size <= uniqueOptions.size) {
+          
+            addOptionButton.disabled = true;
+        }
+        else {
+            addOptionButton.disabled = false;
         }
     }
-
-    function addSizeSelector() {
-        const newSizeSelector = document.createElement("select");
-        newSizeSelector.classList.add("size-select");
-        Array.from(foodSizeSelect.children).forEach((option) => {
-            newSizeSelector.add(new Option(option.text, option.value));
-        });
-        sizeContainer.appendChild(newSizeSelector);
-
-        const newCostInput = document.createElement("input");
-        newCostInput.type = "number";
-        newCostInput.step = "5.00";
-        newCostInput.classList.add("cost-input");
-        newCostInput.id = `foodCostBySize_${index}`;
-        newCostInput.placeholder = "Cost for Size";
-        sizeContainer.appendChild(newCostInput);
-        index++;
-    }
+});
 </script>
 
           <h2 align="center">Current Menu</h2><br><br>
@@ -259,7 +295,7 @@
           </div>
       
         
-<script src="new menuscript.js"></script>
+<script src="menuscript.js"></script>
         
     </div>
   </div>

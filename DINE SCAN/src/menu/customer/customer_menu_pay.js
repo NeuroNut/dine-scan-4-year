@@ -2,6 +2,7 @@
 let count = {};
 let countTotal = 0;
 let totalAmount = 0;
+let disAmount = 0;
 let paymentMode = "postpaid";
 let p_amount = 0;
 let pay_id = "not available for postpaid";
@@ -120,6 +121,7 @@ function updateTotalCount() {
 
   //console.log(count);
   updateButtonState();
+  birthdayDiscount();
 
 }
 
@@ -147,9 +149,65 @@ function getQueryParam(name) {
   return urlParams.get(name);
 }
 
+
+
 const pastOrdersButton = document.getElementById("past-orders-btn");
 const pastOrdersDiv = document.getElementById("past-orders");
 let pastOrdersVisible = false;
+let customerName;
+let hb=0;
+
+
+
+const mobileNumber = getQueryParam('mobileNumber');
+fetch(`get_customer_details.php?mobileNumber=${mobileNumber}`)
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.length > 0) {
+        data.forEach((customer) => {
+          customerName = customer.Name;
+          const customerNameElement = document.getElementById('greeting');
+          customerNameElement.textContent = `Hi, ${customerName}!`;
+          //if customer.dob is today, show a birthday message
+          const today = new Date();
+          const dob = new Date(customer.dob);
+          // console.log(today.getMonth());
+          // console.log(dob.getMonth());
+
+          if (today.getMonth() === dob.getMonth() && today.getDate() === dob.getDate()) {
+            hb = 1;
+            const customerNameElement = document.getElementById('greeting');
+            customerNameElement.textContent = `Happy Birthday, ${customerName}! Today is ${today.getDate()} ${getMonthName(today.getMonth())}. Enjoy your special day with us! Get 20% off on your final billing!`;
+          }
+
+          function getMonthName(month) {
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            return monthNames[month];
+          }
+
+        });
+      } else {
+        console.log('No Name of customer found');
+      }
+    })
+    .catch((error) => {
+      console.error('Error fetching past orders:', error);
+    });
+
+
+
+function birthdayDiscount(){
+  if(hb==1){
+    disAmount = totalAmount * 0.8;
+    // console.log(disAmount);
+    const disAmountLabel = document.getElementById('dis-amount1');
+    disAmountLabel.textContent = 'Discount Amount: ₹ ' + disAmount.toFixed(2);
+    p_amount = disAmount.toFixed(2) * 100;
+
+    
+  }
+}
+        
 
 pastOrdersButton.addEventListener("click", () => {
   if (!pastOrdersVisible) {
@@ -222,6 +280,9 @@ function displayTableNumber() {
 window.addEventListener('DOMContentLoaded', displayTableNumber);
 
 function sendOrderData() {
+  if(disAmount>0){
+    totalAmount = disAmount;
+  }
   const orderData = {
     table_number: getQueryParam('tableNo'),
     total_amount: totalAmount.toFixed(2),

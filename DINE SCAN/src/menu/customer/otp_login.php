@@ -35,7 +35,7 @@ CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 CURLOPT_CUSTOMREQUEST => "POST",
 CURLOPT_POSTFIELDS => json_encode($fields),
 CURLOPT_HTTPHEADER => array(
-"authorization: GVMdL26paEvAUkjozyq7ZFnTCOmb8uSie5hr1IX9BxH4PcDsQgSdmzP3Z4UgHEp7I9ce6tyNlGOChrTB",
+"authorization: ",
 "accept: */*",
 "cache-control: no-cache",
 "content-type: application/json"

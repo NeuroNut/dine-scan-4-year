@@ -73,6 +73,7 @@ $(document).ready(function() {
           const listItem2 = document.createElement("li");
           const listItem3 = document.createElement("li");
           const listItem4 = document.createElement("li");
+          const listItem5 = document.createElement("li");
 
            // Add the food item image to the list item
           const foodItemImage = document.createElement("img");
@@ -90,14 +91,18 @@ $(document).ready(function() {
           listItem3.appendChild(size);
 
           const quantity = document.createElement("p");
-          quantity.textContent = "Quantity: " + item.quantity;
+          quantity.textContent = "Quantity of item: " + item.quantity;
           listItem4.appendChild(quantity);
 
+          const icost = document.createElement("p");
+          icost.textContent = "Cost: ₹" + item.icost;
+          listItem5.appendChild(icost);
           
           orderList.appendChild(listItem);
           orderList.appendChild(listItem2);
           orderList.appendChild(listItem3);
           orderList.appendChild(listItem4);
+          orderList.appendChild(listItem5);
           orderDetails.appendChild(orderList);
       }
 

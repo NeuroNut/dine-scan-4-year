@@ -17,11 +17,13 @@ if (isset($_GET['mobileNumber'])) {
     
     
     // Fetch all orders and their items from the database
-    $sql = "SELECT orders.order_id, orders.table_number, orders.total_amount, orders.order_date, orders.payment_mode, orders.payment_id, orders.status, order_items.quantity, order_items.size_name, menu_items.name, menu_items.image, orders.instructions
+    $sql = "SELECT orders.order_id, orders.table_number, orders.total_amount, orders.order_date, orders.payment_mode, orders.payment_id, orders.status, order_items.quantity, order_items.size_name, menu_items.name, menu_sizesncosts.cost as icost, menu_items.image, orders.instructions
             FROM orders
             INNER JOIN order_items ON orders.order_id = order_items.order_id
             INNER JOIN menu_items ON order_items.menu_item_id = menu_items.id
-            WHERE mobileNumber = '$mobileNumber' ORDER BY orders.order_id DESC";
+            INNER JOIN size_options ON order_items.size_name = size_options.size_name
+            INNER JOIN menu_sizesncosts ON menu_items.id = menu_sizesncosts.menu_id AND size_options.size_id = menu_sizesncosts.size_id
+            WHERE mobileNumber = '$mobileNumber' ORDER BY orders.order_id DESC;";
     
     $result = $conn->query($sql);
     
@@ -43,6 +45,7 @@ if (isset($_GET['mobileNumber'])) {
                 "image" => $row["image"],
                 "size_name" => $row["size_name"],
                 "quantity" => $row["quantity"],
+                "icost" => $row["icost"],
                 
             );
     
